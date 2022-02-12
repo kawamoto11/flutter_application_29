@@ -38,7 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: getBar(),
             ),
             Container(
-              height: 300,
+              height: 3000, //値を変更
               child: getLine(),
             )
           ],
