@@ -27,7 +27,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('charts'),
+        //↓ここを変更
+        title: Text('業績アプリ'),
       ),
       body: Container(
         child: ListView(
