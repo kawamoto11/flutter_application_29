@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
-void main() => runApp(MyApp());
+//グラフの値を定義
+List<int> b1 = [4210145, 5390012, 5518215, 6604207, 7603910, 7002311];
+
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -25,6 +30,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: Text('charts'),
@@ -32,55 +38,37 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Container(
         child: ListView(
           children: <Widget>[
-            Text('data'),
             Container(
-              height: 300,
-              child: getBar(),
+              child: Text(
+                '営業利益',
+                style: TextStyle(
+                    fontSize: size.height * 0.03, fontWeight: FontWeight.bold),
+              ),
+              margin: EdgeInsets.all(20),
             ),
             Container(
-              height: 3000, //値を変更
-              child: getLine(),
-            )
+              height: size.height * 0.5,
+              child: getBar(),
+            ),
+            TableWidget()
           ],
         ),
       ),
     );
   }
 
-  Widget getLine() {
-    List<Linesales> dataLine = [
-      new Linesales(new DateTime(2019, 7, 2), 33),
-      new Linesales(new DateTime(2019, 7, 3), 55),
-      new Linesales(new DateTime(2019, 7, 4), 22),
-      new Linesales(new DateTime(2019, 7, 5), 88),
-      new Linesales(new DateTime(2019, 7, 6), 123),
-      new Linesales(new DateTime(2019, 7, 7), 75),
-    ];
-
-    var seriesLine = [
-      charts.Series<Linesales, DateTime>(
-        data: dataLine,
-        domainFn: (Linesales lines, _) => lines.time,
-        measureFn: (Linesales lines, _) => lines.sale,
-        id: "Lines",
-      )
-    ];
-    //是TimeSeriesChart，而不是LineChart,因为x轴是DataTime类
-    Widget line = charts.TimeSeriesChart(seriesLine);
-    //line = charts.LineChart(series);
-    return line;
-  }
-
+//棒グラフ
   Widget getBar() {
     List<Barsales> dataBar = [
-      new Barsales("1", 20),
-      new Barsales("2", 50),
-      new Barsales("3", 20),
-      new Barsales("4", 80),
-      new Barsales("5", 120),
-      new Barsales("6", 30),
+      //値を表示
+      new Barsales("2016", b1[0]),
+      new Barsales("2017", b1[1]),
+      new Barsales("2018", b1[2]),
+      new Barsales("2019", b1[3]),
+      new Barsales("2020", b1[4]),
+      new Barsales("2021", b1[5]),
     ];
-
+//説明が難しい
     var seriesBar = [
       charts.Series(
         data: dataBar,
@@ -93,14 +81,97 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
+//よくわからん
 class Barsales {
   String day;
   int sale;
   Barsales(this.day, this.sale);
 }
 
+//よくわからん
 class Linesales {
   DateTime time;
   int sale;
   Linesales(this.time, this.sale);
+}
+
+//表のコード
+class TableWidget extends StatelessWidget {
+  TableWidget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.green),
+          color: Colors.blue,
+        ),
+        child: DataTable(
+          columns: <DataColumn>[
+            //上段のコード
+            DataColumn(
+              label: Text(
+                '営業利益',
+                style: TextStyle(fontStyle: FontStyle.italic),
+              ),
+            ),
+            DataColumn(
+              label: Text(
+                '2016',
+                style: TextStyle(fontStyle: FontStyle.italic),
+              ),
+            ),
+            DataColumn(
+              label: Text(
+                '2017',
+                style: TextStyle(fontStyle: FontStyle.italic),
+              ),
+            ),
+            DataColumn(
+              label: Text(
+                '2018',
+                style: TextStyle(fontStyle: FontStyle.italic),
+              ),
+            ),
+            DataColumn(
+              label: Text(
+                '2019',
+                style: TextStyle(fontStyle: FontStyle.italic),
+              ),
+            ),
+            DataColumn(
+              label: Text(
+                '2020',
+                style: TextStyle(fontStyle: FontStyle.italic),
+              ),
+            ),
+            DataColumn(
+              label: Text(
+                '2021',
+                style: TextStyle(fontStyle: FontStyle.italic),
+              ),
+            ),
+          ],
+          rows: <DataRow>[
+            DataRow(
+              //下段のコード
+              cells: <DataCell>[
+                DataCell(Text('Sarah')),
+                DataCell(Text(b1[0].toString())),
+                DataCell(Text(b1[1].toString())),
+                DataCell(Text(b1[2].toString())),
+                DataCell(Text(b1[3].toString())),
+                DataCell(Text(b1[4].toString())),
+                DataCell(Text(b1[5].toString())),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
